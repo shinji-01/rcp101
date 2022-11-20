@@ -3,21 +3,23 @@ import math
 from algorithms import *
 from functions import *
 
+I = math.inf
+
 MATRIX=[
-    [0, math.inf, math.inf, math.inf, 2, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf],
-[math.inf, 0, 4, 4, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf],
-[5, math.inf, 0, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf],
-[math.inf, math.inf, math.inf, 0, math.inf, math.inf, math.inf, 8, math.inf, math.inf, math.inf, math.inf, math.inf, 8],
-[math.inf, math.inf, math.inf, math.inf, 0, math.inf, 4, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf],
-[math.inf, math.inf, math.inf, math.inf, math.inf, 0, 3, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf],
-[math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, 0, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf],
-[1, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, 0, math.inf, math.inf, math.inf, 1, math.inf, math.inf],
-[math.inf, math.inf, math.inf, math.inf, math.inf, 3, math.inf, math.inf, 0, math.inf, math.inf, math.inf, math.inf, math.inf],
-[math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, 0, math.inf, math.inf, math.inf, math.inf],
-[math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, 4, math.inf, 0, math.inf, math.inf, math.inf],
-[math.inf, math.inf, math.inf, math.inf, math.inf, 1, math.inf, math.inf, math.inf, math.inf, math.inf, 0, math.inf, math.inf],
-[math.inf, math.inf, math.inf, math.inf, math.inf, 3, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, 0, math.inf],
-[math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, math.inf, 2, 0]
+    [0, I, I, I, 2, I, I, I, I, I, I, I, I, I],
+    [I, 0, 4, 4, I, I, I, I, I, I, I, I, I, I],
+    [5, I, 0, I, I, I, I, I, I, I, I, I, I, I],
+    [I, I, I, 0, I, I, I, 8, I, I, I, I, I, 8],
+    [I, I, I, I, 0, I, 4, I, I, I, I, I, I, I],
+    [I, I, I, I, I, 0, 3, I, I, I, I, I, I, I],
+    [I, I, I, I, I, I, 0, I, I, I, I, I, I, I],
+    [1, I, I, I, I, I, I, 0, I, I, I, 1, I, I],
+    [I, I, I, I, I, 3, I, I, 0, I, I, I, I, I],
+    [I, I, I, I, I, I, I, I, I, 0, I, I, I, I],
+    [I, I, I, I, I, I, I, I, 4, I, 0, I, I, I],
+    [I, I, I, I, I, 1, I, I, I, I, I, 0, I, I],
+    [I, I, I, I, I, 3, I, I, I, I, I, I, 0, I],
+    [I, I, I, I, I, I, I, I, I, I, I, I, 2, 0]
 ]
 
 res, path = floyd_warshall(MATRIX, route=('B', 'G'), search='min')
