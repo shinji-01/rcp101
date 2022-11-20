@@ -50,19 +50,19 @@
 # }}}
 
 from copy import deepcopy
-import math
+import math, string
 from functions import *
 
-def transitive_closure(m):
-    identity_matrix = construct_identity(len(m))
+def transitive_closure(matrix):
+    identity_matrix = construct_identity(len(matrix))
 
-    mi = add(m, identity_matrix)
+    mi = add(matrix, identity_matrix)
 
     res = deepcopy(mi)
 
     iteration = 1
 
-    for n in range(len(m)):
+    for n in range(len(matrix)):
         before = deepcopy(res)
 
         res = multiply(mi, res)
@@ -101,3 +101,37 @@ def bellman_ford(matrix):
 
     return distances
 
+# Pour obtenir une matrice des plus courts chemins par arc.
+def floyd_warshall(matrix, route=None, search='min'):
+    # shortest path matrix
+    sp_matrix = deepcopy(matrix)
+
+    # path reconstruction matrix
+    pr_matrix = [[None]*len(matrix) for i in range(len(matrix))]
+
+    for i in range(len(matrix)):
+        pr_matrix[i][i] = i
+        for j in range(len(matrix)):
+            pr_matrix[i][j] = j
+
+    for k in range(len(matrix)):
+        for i in range(len(matrix)):
+            for j in range(len(matrix)):
+                if i == k or j == k or i == j:
+                    continue
+
+                if search == 'min':
+                    if sp_matrix[i][j] > sp_matrix[i][k] + sp_matrix[k][j]:
+                        sp_matrix[i][j] = sp_matrix[i][k] + sp_matrix[k][j]
+                        pr_matrix[i][j] = pr_matrix[i][k]
+                else:
+                    if sp_matrix[i][j] < sp_matrix[i][k] + sp_matrix[k][j]:
+                        sp_matrix[i][j] = sp_matrix[i][k] + sp_matrix[k][j]
+
+    if route is not None:
+        converted_route = (string.ascii_uppercase.index(route[0]), string.ascii_uppercase.index(route[1]))
+        shortest_path = path_reconstruction(pr_matrix, converted_route)
+
+        return sp_matrix, shortest_path
+
+    return sp_matrix

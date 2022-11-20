@@ -1,20 +1,39 @@
 import string
 
-def print_matrix(m):
-    header = '  '.join(string.digits[i] for i in range(len(m)))
+def format_path(path):
+    letter_path = [string.ascii_uppercase[vertex] for vertex in path]
+    return ' => '.join(letter_path)
+
+def path_reconstruction(matrix, route):
+    start = route[0]
+    end = route[1]
+
+    if matrix[start][end] == None:
+        return []
+
+    path = [start]
+
+    while start != end:
+        start = matrix[start][end]
+        path.append(start)
+
+    return path
+
+def print_matrix(matrix):
+    header = '  '.join(string.ascii_uppercase[i] for i in range(len(matrix)))
     print(f'\n   {header}')
 
-    for i in range(len(m)):
-        print(string.digits[i], end=' ')
-        line = ', '.join(str(n) for n in m[i])
+    for i in range(len(matrix)):
+        print(string.ascii_uppercase[i], end=' ')
+        line = ', '.join(str(n) for n in matrix[i])
 
         print(f'({line})')
 
 
-def multiply(m, m2):
+def multiply(matrix, matrix2):
     # Pour ne pas modifier la matrice originale
-    m_len = len(m)
-    res = deepcopy(m)
+    m_len = len(matrix)
+    res = deepcopy(matrix)
 
     # Double boucle pour mettre les valeurs de la nouvelle matrice
     for i in range(m_len):
@@ -22,16 +41,16 @@ def multiply(m, m2):
             val = 0
 
             for k in range(m_len):
-                val += m[i][k] * m2[k][j]
+                val += matrix[i][k] * matrix2[k][j]
 
             res[i][j] = val
 
     return res
 
 # Remplace toutes les valeurs au-dessus de 1 par 1
-def binarize(m):
-    m_len = len(m)
-    res = deepcopy(m)
+def binarize(matrix):
+    m_len = len(matrix)
+    res = deepcopy(matrix)
 
     for i in range(m_len):
         for j in range(m_len):
@@ -41,31 +60,30 @@ def binarize(m):
     return res
 
 
-def add(m, m2):
+def add(matrix, matrix2):
     # Pour ne pas modifier la matrice originale
-    m_len = len(m)
-    res = deepcopy(m)
+    m_len = len(matrix)
+    res = deepcopy(matrix)
 
     # Double boucle pour mettre les valeurs de la nouvelle matrice
     for i in range(m_len):
         for j in range(m_len):
-            res[i][j] = m[i][j] + m2[i][j]
+            res[i][j] = matrix[i][j] + matrix2[i][j]
 
     return res
 
-
 def construct_identity(length):
-    res = [[0 for x in range(length)] for y in range(length)] 
+    res = [[0 for x in range(length)] for y in range(length)]
 
     for i in range(length):
         res[i][i] = 1
 
     return res
 
-def has_changed(m, m2):
-    for i in range(len(m)):
-        for j in range(len(m)):
-            if m[i][j] != m2[i][j]:
+def has_changed(matrix, matrix2):
+    for i in range(len(matrix)):
+        for j in range(len(matrix)):
+            if matrix[i][j] != matrix2[i][j]:
                 return True
 
     return False
