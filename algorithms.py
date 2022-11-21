@@ -135,3 +135,65 @@ def floyd_warshall(matrix, route=None, search='min'):
         return sp_matrix, shortest_path
 
     return sp_matrix
+
+def simplexe(matrix, coefs, base, solutions, debug=False):
+    width = len(matrix[0]) - 1
+    height = len(matrix) - 1
+
+    if debug:
+        print('Problem expression:')
+        print_linear_problem(matrix, coefs)
+
+    # Convert values of matrix to float
+    for i in range(height + 1):
+        for j in range(width + 1):
+            matrix[i][j] = float(matrix[i][j])
+
+    next_matrix = deepcopy(matrix)
+
+    while max(next_matrix[height]) > 0:
+        matrix_tmp = deepcopy(next_matrix)
+
+        # step 3: Choisir les variables à introduire dans la base
+        # On détermine la colonne du pivot c en prenant la valeur maximum dans la ligne Z.
+        # On prend la colonne ayant la valeur maximum dans la ligne Z (fonction à optimiser)
+        p_column = matrix_tmp[height].index(max(matrix_tmp[height]))
+
+        # step 4: Choisir la variable à enlever de la base
+        # On divise les valeurs de la solution B par les valeurs dans la colonne du pivot et on choisit la valeur minimale positive.
+        # Les valeurs de la solution B sont mise en bout de ligne. (ex: x1 + 2x2 = 230 => [1, 2, 230])
+        # Si notre pivot est la première ligne (matrix[0]) nous devons donc choisir la plus petite valeur parmis
+        # La ligne ayant la valeur minimale sera nommé "ligne pivot"
+        compute_line = []
+
+        for i in range(height):
+            if matrix_tmp[i][p_column] > 0:
+                compute_line.append(matrix_tmp[i][width] / matrix_tmp[i][p_column])
+            else:
+                compute_line.append(math.inf)
+
+        p_line = compute_line.index(min(compute_line))
+
+        base[p_line] = coefs[p_column]
+
+        # step 5: Encadrer le pivot
+        pivot = matrix_tmp[p_line][p_column]
+
+        # step 6: diviser la ligne du pivot par le pivot
+        for j in range(width + 1):
+            next_matrix[p_line][j] = matrix_tmp[p_line][j] / pivot
+
+        # step 7: calculer les valeurs des autres lignes
+        # La valeur calculée sera nommé E
+        for i in range(height + 1):
+            if i == p_line:
+                continue
+
+            for j in range(width + 1):
+                next_matrix[i][j] = matrix_tmp[i][j] - (matrix_tmp[i][p_column] / pivot) * matrix_tmp[p_line][j]
+
+    # L'algorithme s'arrête si les valeurs des coefficients dans la fonction objectif sont négatifs ou nul
+    print('\nSolution:')
+
+    for solution in solutions:
+        print(f'{solution} = {next_matrix[base.index(solution)][width]}')

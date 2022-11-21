@@ -1,5 +1,20 @@
 import string
 
+def print_linear_problem(matrix, coefs):
+    width = len(matrix[0]) - 1
+    height = len(matrix) - 1
+
+    for i in range(height):
+        line = []
+        for j in range(width):
+            if matrix[i][j] != 0:
+                if matrix[i][j] > 1:
+                    line.append(f'{matrix[i][j]}*{coefs[j]}')
+                else:
+                    line.append(f'{coefs[j]}')
+
+        print(f"{' + '.join(line)} = {matrix[i][width]}")
+
 def format_path(path):
     letter_path = [string.ascii_uppercase[vertex] for vertex in path]
     return ' => '.join(letter_path)
