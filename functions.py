@@ -1,5 +1,8 @@
 import string
 
+from copy import deepcopy
+from tabulate import tabulate
+
 def print_linear_problem(matrix, coefs):
     width = len(matrix[0]) - 1
     height = len(matrix) - 1
@@ -34,16 +37,14 @@ def path_reconstruction(matrix, route):
 
     return path
 
-def print_matrix(matrix):
-    header = '  '.join(string.ascii_uppercase[i] for i in range(len(matrix)))
-    print(f'\n   {header}')
+def print_matrix(matrix, headers, base=None):
+    m = deepcopy(matrix)
 
-    for i in range(len(matrix)):
-        print(string.ascii_uppercase[i], end=' ')
-        line = ', '.join(str(n) for n in matrix[i])
+    if base:
+        for idx, line in enumerate(m):
+            line.insert(0, base[idx])
 
-        print(f'({line})')
-
+    print(tabulate(m, headers=headers, tablefmt="grid"))
 
 def multiply(matrix, matrix2):
     # Pour ne pas modifier la matrice originale

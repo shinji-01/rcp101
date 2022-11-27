@@ -142,7 +142,7 @@ def simplexe(matrix, coefs, base, solutions, debug=False):
 
     if debug:
         print('Problem expression:')
-        print_linear_problem(matrix, coefs)
+        print_linear_problem(matrix, coefs[:-1])
 
     # Convert values of matrix to float
     for i in range(height + 1):
@@ -151,6 +151,12 @@ def simplexe(matrix, coefs, base, solutions, debug=False):
 
     next_matrix = deepcopy(matrix)
 
+    if debug:
+        print('\nInitialisation de la matrice')
+        print_matrix(next_matrix, headers=coefs, base=base)
+
+    step = 1
+
     while max(next_matrix[height]) > 0:
         matrix_tmp = deepcopy(next_matrix)
 
@@ -158,6 +164,7 @@ def simplexe(matrix, coefs, base, solutions, debug=False):
         # On détermine la colonne du pivot c en prenant la valeur maximum dans la ligne Z.
         # On prend la colonne ayant la valeur maximum dans la ligne Z (fonction à optimiser)
         p_column = matrix_tmp[height].index(max(matrix_tmp[height]))
+        print(coefs[p_column])
 
         # step 4: Choisir la variable à enlever de la base
         # On divise les valeurs de la solution B par les valeurs dans la colonne du pivot et on choisit la valeur minimale positive.
@@ -177,6 +184,11 @@ def simplexe(matrix, coefs, base, solutions, debug=False):
         base[p_line] = coefs[p_column]
 
         # step 5: Encadrer le pivot
+        if debug:
+            print('Ligne pivot', p_line)
+            print('Colonne pivot', p_column)
+            print('Pivot', matrix[p_line][p_column])
+
         pivot = matrix_tmp[p_line][p_column]
 
         # step 6: diviser la ligne du pivot par le pivot
@@ -192,8 +204,39 @@ def simplexe(matrix, coefs, base, solutions, debug=False):
             for j in range(width + 1):
                 next_matrix[i][j] = matrix_tmp[i][j] - (matrix_tmp[i][p_column] / pivot) * matrix_tmp[p_line][j]
 
+        if debug:
+            print(f'\nÉtape {step}')
+            print_matrix(next_matrix, headers=coefs, base=base)
+
+        step = step + 1
+
     # L'algorithme s'arrête si les valeurs des coefficients dans la fonction objectif sont négatifs ou nul
     print('\nSolution:')
 
     for solution in solutions:
         print(f'{solution} = {next_matrix[base.index(solution)][width]}')
+
+# Exemple:
+# max Z = 6 X1 + 5 X2 + 4 X3
+# 2 X1 + X2 + X3 <= 240
+# X1 + 3 X2 + 2 X3 <= 360
+# 2 X1 + X2 + 2 X3 <= 300
+def maximization_simplex(matrix, variables, basics, rhs, Z):
+    print('hello')
+
+
+matrix = [
+    [2, 1, 1, 1, 0, 0],
+    [1, 3, 2, 0, 1, 0],
+    [2, 1, 2, 0, 0, 1],
+]
+variables = ['x1', 'x2', 'x3', 's1', 's2', 's3']
+basics = ['s1', 's2', 's3']
+rhs = [
+    240,
+    360,
+    300
+]
+Z = [-6, -5, -4, 0, 0, 0]
+
+maximization_simplex(matrix, variables, basics, rhs, Z)
